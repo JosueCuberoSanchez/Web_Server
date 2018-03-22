@@ -5,13 +5,7 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) {
-        try {
-            new Thread(new Server(80)).start();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        HTTPServer httpServer = new HTTPServer();
+        httpServer.startServer();
     }
 }

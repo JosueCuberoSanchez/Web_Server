@@ -1,59 +1,34 @@
-
-import sun.rmi.runtime.Log;
-
-import java.io.*;
-
 /**
- * Created by Renato & Vladimir on 21/10/2017.
+ * Created by josue on 22/03/18.
  */
-public class Client extends Connection implements Runnable {
-    private int port;
-    private String hostAddress;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
+public class Client{
 
-    public Client(int port, String host) throws IOException {
-        this.port = port;
-        this.hostAddress = host;
-        this.PORT = port;
-        this.HOST = host;
-        this.connectedAS = "";
-    }
+    private Socket cs;
+    private DataOutputStream outServer;
 
-    public void startClient() {
+    public Client() {
         try {
-            this.initConnection("client", this.port, this.hostAddress);
-            if (this.cs != null && !this.cs.isClosed()) {
-                this.outServer = new PrintWriter(cs.getOutputStream(),true);
-                BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
-                String writing = "";
-                while (this.active) {
-                    //System.out.println(writing);
-                    this.outServer.println("");
-                    this.serverMessage = input.readLine();
-                    if (this.serverMessage == null) {
-                        //System.out.println("Lost connection");
-                    } else {
-                        writing = "Server message: " + this.serverMessage + "\r\n";
-                        //System.out.println(writing);
-                    }
-
-                    Thread.sleep(10000);
-                    // System.out.println(serverMessage);
-                    // serverMessage = input.readLine();
-                    //System.out.println(serverMessage);
-                    // Guarda el mapeo
-                }
-            }
-            //cs.close();
-        } catch (Exception e) {
-            //e.printStackTrace();
+            this.cs = new Socket("localhost", 8000);
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
-
-    @Override
-    public void run() {
-        this.startClient();
+    public void startClient(String message){
+        try {
+            this.outServer = new DataOutputStream(cs.getOutputStream());
+            this.outServer.writeUTF(message);
+            this.cs.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
-
 }
