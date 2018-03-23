@@ -1,6 +1,5 @@
 import javax.activation.MimetypesFileTypeMap;
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * Created by josue on 21/03/18.
@@ -9,14 +8,51 @@ public class RequestProcesser{
 
     public RequestProcesser(){}
 
-    public void handle(String message, PrintWriter outClient){
+    private String buildMessage(InputStream is){
+        String message = "";
+        try {
+            InputStreamReader isReader = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isReader);
+
+            //code to read and print headers
+            String headerLine = null;
+            while ((headerLine = br.readLine()).length() != 0) {
+                message += headerLine + "\n";
+                //System.out.println(headerLine);
+            }
+
+            //code to read the post payload data
+            StringBuilder payload = new StringBuilder();
+            while (br.ready()) {
+                payload.append((char) br.read());
+            }
+            //System.out.println("Payload data is: " + payload.toString());
+            if(!payload.toString().equals("")){
+                message += payload.toString();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+    public void handle(PrintWriter outClient, InputStream is){
+        String message = this.buildMessage(is);
+
+        /*outClient.println("HTTP/1.1 200 OK");
+        outClient.println("Date: Fri, 29 May 2015 13:24:18 GMT");
+        outClient.println("Server: MiServidor/1.0");
+        outClient.println("Content-Length: 44");
+        outClient.println("Content-Type: text");
+        outClient.println("\r\n");
+        outClient.println("<html><body><h1>¡Hola!</h1></body></html>");*/
 
         String splitMessage[] = message.split("\n");
         String resource = (splitMessage[0].split("/"))[1];
         resource = (resource.split(" "))[0];
 
         if (splitMessage[0].startsWith("GET")) {
-            if (this.resourceExist(resource)) {
+            if (this.resourceExists(resource)) {
                 System.out.println("GET. MimeType: "+this.getMimeType(resource));
             }
             else{
@@ -24,7 +60,7 @@ public class RequestProcesser{
             }
         }
         else if (splitMessage[0].startsWith("HEAD")) {
-            if (this.resourceExist(resource)) {
+            if (this.resourceExists(resource)) {
                 System.out.println("HEAD. Tipo de MimeType: "+this.getMimeType(resource));
             }
             else{
@@ -32,7 +68,7 @@ public class RequestProcesser{
             }
         }
         else if (splitMessage[0].startsWith("POST")) {
-            if (this.resourceExist(resource)) {
+            if (this.resourceExists(resource)) {
                 System.out.println("200: OK, POST. Tipo de MimeType: "+this.getMimeType(resource));
             }
             else{
@@ -46,7 +82,7 @@ public class RequestProcesser{
         outClient.println(message);
     }
 
-    private boolean resourceExist(String resource){
+    private boolean resourceExists(String resource){
         resource = "src/main/resources/" + resource;
         File f = new File(resource);
         return (f.exists());

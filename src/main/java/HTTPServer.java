@@ -33,16 +33,10 @@ public class HTTPServer{
         try {
             while(true) {
                 System.out.println("\nServidor  esperando...");
-                cs = ss.accept();
+                this.cs = this.ss.accept();
                 System.out.println("Cliente conectado en el servidor ");
-                BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
-                String line = input.readLine();
-                String message = "";
-                while (line!=null &&  !(line).equals("") ) {
-                    message += line + "\n";
-                    line = input.readLine();
-                }
-                Thread thread = new Thread(new HandlerThread(message,new PrintWriter(this.cs.getOutputStream(), true)));
+                Thread thread = new Thread(new HandlerThread(
+                        new PrintWriter(this.cs.getOutputStream(), true), this.cs.getInputStream()));
                 thread.start();
                 ss.close();
                 ss = new ServerSocket(8000);
