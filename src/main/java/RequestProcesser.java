@@ -1,3 +1,4 @@
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.PrintWriter;
 
@@ -16,7 +17,7 @@ public class RequestProcesser{
 
         if (splitMessage[0].startsWith("GET")) {
             if (this.resourceExist(resource)) {
-                System.out.println("GET");
+                System.out.println("GET. MimeType: "+this.getMimeType(resource));
             }
             else{
                 System.out.println("ERROR 404, NOT FOUND");
@@ -24,7 +25,7 @@ public class RequestProcesser{
         }
         else if (splitMessage[0].startsWith("HEAD")) {
             if (this.resourceExist(resource)) {
-                System.out.println("HEAD");
+                System.out.println("HEAD. Tipo de MimeType: "+this.getMimeType(resource));
             }
             else{
                 System.out.println("ERROR 404, NOT FOUND");
@@ -32,7 +33,7 @@ public class RequestProcesser{
         }
         else if (splitMessage[0].startsWith("POST")) {
             if (this.resourceExist(resource)) {
-                System.out.println("200: OK, POST");
+                System.out.println("200: OK, POST. Tipo de MimeType: "+this.getMimeType(resource));
             }
             else{
                 System.out.println("ERROR 404, NOT FOUND");
@@ -49,6 +50,12 @@ public class RequestProcesser{
         resource = "src/main/resources/" + resource;
         File f = new File(resource);
         return (f.exists());
+    }
+
+    private static String getMimeType(String resource) {
+        MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+        String mimeType = mimeTypesMap.getContentType(resource);
+        return mimeType;
     }
 
 }
