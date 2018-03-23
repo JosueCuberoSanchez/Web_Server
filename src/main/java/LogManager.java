@@ -1,25 +1,34 @@
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by Renato on 22/03/2018.
  */
 public class LogManager {
 
+    private boolean isOpen;
+
     public LogManager() {
+        this.isOpen = false;
+    }
+
+    public void write(String method, String time, String server, String refer, String url, String data) {
         this.showLog();
+
     }
 
-    public void write(String method, String time, String server, String refer, String url, String data){
-    }
 
-    private void showLog(){
-        File htmlFile = new File("src/main/resources/LogTable.html");
-        try {
-            Desktop.getDesktop().browse(htmlFile.toURI());
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void showLog() {
+        String htmlFileName = "src/main/resources/LogTable.html";
+        File htmlFile = new File(htmlFileName);
+        if (!this.isOpen) {
+            try {
+                Desktop.getDesktop().browse(htmlFile.toURI());
+                this.isOpen = true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

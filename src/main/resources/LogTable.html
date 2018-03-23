@@ -11,46 +11,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+    <script src="AdderRows.js" type="text/javascript"></script>
+
     <title>Log Table</title>
 </head>
 <body>
 
     <h3 align="center">Bitácora</h3>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">Método</th>
-                <th scope="col">Estampilla de Tiempo</th>
-                <th scope="col">Servidor</th>
-                <th scope="col">Refiere</th>
-                <th scope="col">URL</th>
-                <th scope="col">Datos</th>
-            </tr>
-        </thead>
-        <tbody>
-            <foreach( $row in $rows )>
+    <form>
+        <table class="table table-bordered" id="table">
+            <thead>
                 <tr>
-                    <td>$row.name</td>
-                    <td>$row.time</td>
-                    <td>$row.server</td>
-                    <td>$row.refer</td>
-                    <td>$row.url</td>
-                    <td>$row.data</td>
+                    <th scope="col">Método</th>
+                    <th scope="col">Estampilla de Tiempo</th>
+                    <th scope="col">Servidor</th>
+                    <th scope="col">Refiere</th>
+                    <th scope="col">URL</th>
+                    <th scope="col">Datos</th>
                 </tr>
-            </foreach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 
-    <div align="center">
-        <button onclick="myFunction()" class="btn btn-primary">Actualizar</button>
+        <div align="center">
+            <!-- <button onclick="reload();" class="btn btn-primary">Actualizar</button>-->
+            <!--<button type="reset" class="btn btn-primary">Limpiar</button>-->
+        </div>
 
-        <script>
-            function myFunction() {
-                location.reload();
-            }
-        </script>
-    </div>
+    </form>
 
 </body>
-</html>

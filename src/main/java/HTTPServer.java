@@ -36,13 +36,18 @@ public class HTTPServer{
                 System.out.println("Cliente conectado en el servidor ");
                 this.outClient = new PrintWriter(this.cs.getOutputStream(), true);
                 BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
-                String line;
+                String line = input.readLine();
                 String message = "";
-                while (!(line = input.readLine()).equals("")) {
+                while (line!=null &&  !(line).equals("") ) {
                     message += line + "\n";
+                    line = input.readLine();
                 }
-                Thread thread = new Thread(new HandlerThread(message));
-                thread.start();
+                outClient.println(message);
+                //Thread thread = new Thread(new HandlerThread(message));
+                //thread.start();
+                ss.close();
+                cs.close();
+                ss = new ServerSocket(8000);
             }
         } catch (Exception e) {
             e.printStackTrace();
