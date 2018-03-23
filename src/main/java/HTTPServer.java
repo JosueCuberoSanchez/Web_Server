@@ -6,6 +6,7 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -34,7 +35,6 @@ public class HTTPServer{
                 System.out.println("\nServidor  esperando...");
                 cs = ss.accept();
                 System.out.println("Cliente conectado en el servidor ");
-                this.outClient = new PrintWriter(this.cs.getOutputStream(), true);
                 BufferedReader input = new BufferedReader(new InputStreamReader(cs.getInputStream()));
                 String line = input.readLine();
                 String message = "";
@@ -42,11 +42,9 @@ public class HTTPServer{
                     message += line + "\n";
                     line = input.readLine();
                 }
-                outClient.println(message);
-                //Thread thread = new Thread(new HandlerThread(message));
-                //thread.start();
+                Thread thread = new Thread(new HandlerThread(message,new PrintWriter(this.cs.getOutputStream(), true)));
+                thread.start();
                 ss.close();
-                cs.close();
                 ss = new ServerSocket(8000);
             }
         } catch (Exception e) {

@@ -8,8 +8,11 @@ public class RequestProcesser{
     public RequestProcesser(){}
 
     public void handle(String message, PrintWriter outClient){
-        Client client = new Client();
-        client.startClient(message,outClient);
+        outClient.println("HTTP/1.1 200 OK");
+        outClient.println("Content-Type: text/html");
+        outClient.println("Content-Length: " + message.length());
+        outClient.println();
+        outClient.println(message);
     }
 
 }
