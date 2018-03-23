@@ -1,12 +1,10 @@
 /**
  * Created by josue on 22/03/18.
  */
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class Client{
 
@@ -15,16 +13,22 @@ public class Client{
 
     public Client() {
         try {
-            this.cs = new Socket("localhost", 8000);
+            this.cs = new Socket("127.0.0.1", 8000);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void startClient(String message){
+    public void startClient(String message, PrintWriter out){
         try {
-            this.outServer = new DataOutputStream(cs.getOutputStream());
-            this.outServer.writeUTF(message);
+            out.println("HTTP/1.1 200 OK");
+            out.println("Content-Type: text/html");
+            out.println("Content-Length: " + message.length());
+            out.println();
+            out.println(message);
+            out.flush();
+            out.close();
+            out.close();
             this.cs.close();
         }
         catch (Exception e){
