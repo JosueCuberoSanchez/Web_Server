@@ -1,21 +1,25 @@
 import java.io.DataInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 
 /**
  * Created by josue on 21/03/18.
  */
 public class HandlerThread implements Runnable {
-    private PrintWriter outClient;
-    InputStream is;
+    private OutputStream os;
+    private InputStream is;
+    private ServerSocket ss;
 
-    public HandlerThread(PrintWriter outClient, InputStream is){
+    public HandlerThread(ServerSocket ss,OutputStream os, InputStream is){
         this.is = is;
-        this.outClient = outClient;
+        this.os = os;
+        this.ss = ss;
     }
 
     public void run() {
-        RequestProcesser requestProcesser = new RequestProcesser();
-        requestProcesser.handle(this.outClient,this.is);
+        RequestProcesser requestProcesser = new RequestProcesser(this.ss,this.os,this.is);
+        requestProcesser.handle();
     }
 }
