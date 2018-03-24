@@ -25,6 +25,7 @@ public class HTTPServer{
 
     public HTTPServer(){
         try {
+            this.ss = new ServerSocket(8000);
             this.cs = new Socket();
         } catch (Exception e){
             e.printStackTrace();
@@ -34,7 +35,6 @@ public class HTTPServer{
     public void startServer() {
         try {
             while(true) {
-                ss = new ServerSocket(8000);
                 System.out.println("\nServidor  esperando...");
                 this.cs = this.ss.accept();
                 System.out.println("Cliente conectado en el servidor ");
@@ -62,7 +62,7 @@ public class HTTPServer{
                 outClient.close();
                 outputStream.close();*/
                 Thread thread =
-                        new Thread(new HandlerThread(this.ss,this.cs.getOutputStream(), this.cs.getInputStream()));
+                        new Thread(new HandlerThread(this.cs.getOutputStream(), this.cs.getInputStream()));
                 thread.start();
             }
         } catch (Exception e) {

@@ -23,16 +23,14 @@ public class RequestProcesser{
     private InputStream is;
     private OutputStream os;
     private byte[] imagePayload;
-    private ServerSocket ss;
 
-    public RequestProcesser(ServerSocket ss,OutputStream os,InputStream is){
+    public RequestProcesser(OutputStream os,InputStream is){
         this.mimeTypes = new LinkedList<String>();
         this.mimeTypes.add("text/html");
         this.mimeTypes.add("text/plain");
         this.mimeTypes.add("image/jpeg");
         this.mimeTypes.add("text/php");
         this.printWriter = new PrintWriter(os,true);
-        this.ss = ss;
         this.is = is;
         this.os = os;
         this.httpResponse = "HTTP/1.1 200 OK";
@@ -69,7 +67,6 @@ public class RequestProcesser{
     public void handle(){
         try {
             String message = this.buildMessage();
-            System.out.println(message);
             String splitMessage[] = message.split("\n");
             String resource = (splitMessage[0].split("/"))[1];
             resource = (resource.split(" "))[0];
@@ -84,7 +81,6 @@ public class RequestProcesser{
                     }
                 } else {
                     this.httpResponse = "HTTP/1.1 404 Not Found";
-                    System.out.println("ERROR 404, NOT FOUND");
                 }
             } else if (splitMessage[0].startsWith("HEAD")) {
                 if (this.resourceExists(resource)) {
@@ -115,6 +111,8 @@ public class RequestProcesser{
             this.printWriter.println("Content-Type: " + this.mimeType);
             this.printWriter.println("Date: " + this.getServerTime());
             this.printWriter.println("Server: Monkey Labs Server");
+            this.printWriter.println("Host: localhost");
+            this.printWriter.println("Referer: localhost");
             this.printWriter.println("Content-Length: " + this.contentLength);
             this.printWriter.println();
             if (this.mimeType.equals("image/jpeg")) {
@@ -126,7 +124,6 @@ public class RequestProcesser{
             }
             this.printWriter.close();
             this.os.close();
-            this.ss.close();
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -141,7 +138,6 @@ public class RequestProcesser{
     }
 
     private void openFile(String resource){
-        System.out.println(this.mimeType);
         try {
             if (this.mimeType.equals("text/plain")) {
                 File txt = new File(resource);
@@ -169,7 +165,6 @@ public class RequestProcesser{
                     this.payload += line;
                 }
                 // line is not visible here.
-            System.out.println(this.payload);
         }catch (Exception e){
             e.printStackTrace();
         }
