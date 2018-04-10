@@ -11,7 +11,7 @@ function refreshTable(){
     var fileContent = xmlhttp.responseText;
     var fileArray = fileContent.split('\n');
 
-    alert(fileArray);
+    //alert(fileArray);
     var obj = JSON.parse(fileArray);
 
     //var obj = JSON.parse('{  "rows": { "methods": "GET",  "time": 30, "server": "localhost", "refer": "/localhost", "url": "www.test.com", "data": "mensaje=Hola"} }');
@@ -40,5 +40,5 @@ function cleanTable(table) {
 }
 
 $(document).ready(function() {
-    refreshTable();
+
 });

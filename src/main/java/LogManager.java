@@ -7,14 +7,11 @@ import java.io.*;
 public class LogManager {
 
     public LogManager() {
-        this.showLog();
+        //this.showLog();
     }
 
-    public synchronized void write(String method, String time, String server, String refer, String url, String data) throws IOException {
-        //String injectCode = "<tr><td>" + method + "</td><td>" + time + "</td><td>" + server + "</td><td>" + refer + "</td><td>" + url + "</td><td>" + data + "</td></tr>";
-        //File htmlFile = new File("src/main/resources/LogTable.html");
+    public synchronized void write(String method, long time, String server, String refer, String url, String data)  {
         System.out.println(method+" "+time+" "+server+" "+" "+refer+" "+url+" "+" "+data);
-
     }
 
     private void showLog() {

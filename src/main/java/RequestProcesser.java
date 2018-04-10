@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -80,12 +81,12 @@ public class RequestProcesser {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
-                        this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        //this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
                     } else {
                         if (!resource.equals("")) {
                             this.httpResponse = "HTTP/1.1 406 Not Acceptable";
                         } else {
-                            this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                           // this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
 
                         }
                     }
@@ -97,12 +98,12 @@ public class RequestProcesser {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
-                        this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        //this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
                     } else {
                         if (!resource.equals("")) {
                             this.httpResponse = "HTTP/1.1 406 Not Acceptable";
                         } else {
-                            this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                           // this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
                         }
                     }
                 } else {
@@ -113,12 +114,12 @@ public class RequestProcesser {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
-                        this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        //this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
                     } else {
                         if (!resource.equals("")) {
                             this.httpResponse = "HTTP/1.1 406 Not Acceptable";
                         } else {
-                            this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                           // this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
                         }
                     }
                 } else {
@@ -151,8 +152,7 @@ public class RequestProcesser {
 
     private String getServerTime() {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-6"));
         return dateFormat.format(calendar.getTime());
     }
