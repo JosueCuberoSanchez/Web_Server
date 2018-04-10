@@ -1,3 +1,5 @@
+import sun.rmi.runtime.Log;
+
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +15,8 @@ import java.util.List;
 /**
  * Created by josue on 21/03/18.
  */
-public class RequestProcesser{
+public class RequestProcesser {
+    private LogManager logManager;
     private List<String> mimeTypes;
     private String httpResponse;
     private String mimeType;
@@ -24,19 +27,20 @@ public class RequestProcesser{
     private OutputStream os;
     private byte[] imagePayload;
 
-    public RequestProcesser(OutputStream os,InputStream is){
+    public RequestProcesser(OutputStream os, InputStream is, LogManager logManager) {
+        this.logManager = logManager;
         this.mimeTypes = new LinkedList<String>();
         this.mimeTypes.add("text/html");
         this.mimeTypes.add("text/plain");
         this.mimeTypes.add("image/jpeg");
         this.mimeTypes.add("text/php");
-        this.printWriter = new PrintWriter(os,true);
+        this.printWriter = new PrintWriter(os, true);
         this.is = is;
         this.os = os;
         this.httpResponse = "HTTP/1.1 200 OK";
     }
 
-    private String buildMessage(){
+    private String buildMessage() {
         String message = "";
         try {
             InputStreamReader isReader = new InputStreamReader(this.is);
@@ -55,51 +59,67 @@ public class RequestProcesser{
                 payload.append((char) br.read());
             }
             //System.out.println("Payload data is: " + payload.toString());
-            if(!payload.toString().equals("")){
+            if (!payload.toString().equals("")) {
                 message += payload.toString();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return message;
     }
 
-    public void handle(){
+    public void handle() {
         try {
             String message = this.buildMessage();
-            String splitMessage[] = message.split("\n");
-            String resource = (splitMessage[0].split("/"))[1];
-            resource = (resource.split(" "))[0];
+            String splitMessage[] = message.split("\n"); // Splits the message by lines
+            String resource = (splitMessage[0].split("/"))[1]; // Retrieve the name of the file and its extension, with other content
+            String method = (splitMessage[0].split("/"))[0]; // Retrieve the method
+            resource = (resource.split(" "))[0]; // Retrieve JUST the name of the file and its extension, without other content
+            if (method.startsWith("GET")) {
+                if (this.resourceExists(resource)) {
+                    this.mimeType = this.getMimeType(resource);
+                    if (this.mimeTypes.contains(this.mimeType)) {
+                        this.openFile("src/main/resources/" + resource);
+                        this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                    } else {
+                        if (!resource.equals("")) {
+                            this.httpResponse = "HTTP/1.1 406 Not Acceptable";
+                        } else {
+                            this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
 
-            if (splitMessage[0].startsWith("GET")) {
-                if (this.resourceExists(resource)) {
-                    this.mimeType = this.getMimeType(resource);
-                    if (this.mimeTypes.contains(this.mimeType)) {
-                        this.openFile("src/main/resources/" + resource);
-                    } else {
-                        this.httpResponse = "HTTP/1.1 406 Not Acceptable";
+                        }
                     }
                 } else {
                     this.httpResponse = "HTTP/1.1 404 Not Found";
                 }
-            } else if (splitMessage[0].startsWith("HEAD")) {
+            } else if (method.startsWith("HEAD")) {
                 if (this.resourceExists(resource)) {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
+                        this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
                     } else {
-                        this.httpResponse = "HTTP/1.1 406 Not Acceptable";
+                        if (!resource.equals("")) {
+                            this.httpResponse = "HTTP/1.1 406 Not Acceptable";
+                        } else {
+                            this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        }
                     }
                 } else {
                     this.httpResponse = "HTTP/1.1 404 Not Found";
                 }
-            } else if (splitMessage[0].startsWith("POST")) {
+            } else if (method.startsWith("POST")) {
                 if (this.resourceExists(resource)) {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
+                        this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
                     } else {
-                        this.httpResponse = "HTTP/1.1 406 Not Acceptable";
+                        if (!resource.equals("")) {
+                            this.httpResponse = "HTTP/1.1 406 Not Acceptable";
+                        } else {
+                            this.logManager.write(method, "date", "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        }
                     }
                 } else {
                     this.httpResponse = "HTTP/1.1 404 Not Found";
@@ -124,7 +144,7 @@ public class RequestProcesser{
             }
             this.printWriter.close();
             this.os.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -137,7 +157,7 @@ public class RequestProcesser{
         return dateFormat.format(calendar.getTime());
     }
 
-    private void openFile(String resource){
+    private void openFile(String resource) {
         try {
             if (this.mimeType.equals("text/plain")) {
                 File txt = new File(resource);
@@ -152,37 +172,37 @@ public class RequestProcesser{
             } else { //php
                 //process PHP
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void processTxt(File file){
+    private void processTxt(File file) {
         try {
             this.contentLength = file.length();
             BufferedReader br = new BufferedReader(new FileReader(file));
-                for (String line; (line = br.readLine()) != null; ) {
-                    this.payload += line;
-                }
-                // line is not visible here.
-        }catch (Exception e){
+            for (String line; (line = br.readLine()) != null; ) {
+                this.payload += line;
+            }
+            // line is not visible here.
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void processImage(File jpeg){
+    private void processImage(File jpeg) {
         try {
             BufferedImage image = ImageIO.read(jpeg);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", byteArrayOutputStream);
             byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
             this.imagePayload = byteArrayOutputStream.toByteArray();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private boolean resourceExists(String resource){
+    private boolean resourceExists(String resource) {
         resource = "src/main/resources/" + resource;
         File f = new File(resource); //no se si sirva con imagenes
         return (f.exists());

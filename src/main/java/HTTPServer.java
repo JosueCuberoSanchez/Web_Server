@@ -17,24 +17,26 @@ import java.nio.ByteBuffer;
  * Created by Renato on 21/10/2017.
  */
 
-public class HTTPServer{
+public class HTTPServer {
 
     private ServerSocket ss;
     private Socket cs;
     private PrintWriter outClient;
+    private LogManager logManager;
 
-    public HTTPServer(){
+    public HTTPServer() {
         try {
+            this.logManager = new LogManager();
             this.ss = new ServerSocket(8000);
             this.cs = new Socket();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void startServer() {
         try {
-            while(true) {
+            while (true) {
                 System.out.println("\nServidor  esperando...");
                 this.cs = this.ss.accept();
                 System.out.println("Cliente conectado en el servidor ");
@@ -62,7 +64,7 @@ public class HTTPServer{
                 outClient.close();
                 outputStream.close();*/
                 Thread thread =
-                        new Thread(new HandlerThread(this.cs.getOutputStream(), this.cs.getInputStream()));
+                        new Thread(new HandlerThread(this.cs.getOutputStream(), this.cs.getInputStream(), this.logManager));
                 thread.start();
             }
         } catch (Exception e) {
