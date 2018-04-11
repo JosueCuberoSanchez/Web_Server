@@ -22,7 +22,6 @@ public class LogManager {
         this.persistentData = new PersistentData(method, time, server, refer, url, data);
         this.registers.add(this.persistentData);
         this.parseToJson();
-        System.out.println(method + " " + time + " " + server + " " + " " + refer + " " + url + " " + " " + data);
     }
 
     private void showLog() {
