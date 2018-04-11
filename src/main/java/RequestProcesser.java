@@ -72,7 +72,12 @@ public class RequestProcesser {
     public void handle() {
         try {
             String message = this.buildMessage();
+            System.out.println(message);
             String splitMessage[] = message.split("\n"); // Splits the message by lines
+            String data ="";
+            if (splitMessage.length>6) {
+                data=splitMessage[6];
+            }
             String resource = (splitMessage[0].split("/"))[1]; // Retrieve the name of the file and its extension, with other content
             String method = (splitMessage[0].split("/"))[0]; // Retrieve the method
             resource = (resource.split(" "))[0]; // Retrieve JUST the name of the file and its extension, without other content
@@ -81,13 +86,12 @@ public class RequestProcesser {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
-                        //this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                     } else {
                         if (!resource.equals("")) {
                             this.httpResponse = "HTTP/1.1 406 Not Acceptable";
                         } else {
-                           // this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
-
+                            this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                         }
                     }
                 } else {
@@ -98,12 +102,12 @@ public class RequestProcesser {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
-                        //this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                     } else {
                         if (!resource.equals("")) {
                             this.httpResponse = "HTTP/1.1 406 Not Acceptable";
                         } else {
-                           // this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
+                            this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                         }
                     }
                 } else {
@@ -114,12 +118,12 @@ public class RequestProcesser {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
                         this.openFile("src/main/resources/" + resource);
-                        //this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
+                        this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                     } else {
                         if (!resource.equals("")) {
                             this.httpResponse = "HTTP/1.1 406 Not Acceptable";
                         } else {
-                           // this.logManager.write(method, new Timestamp(System.currentTimeMillis()), "Monkey Labs Server", "localhost", "/" + resource, "data");
+                            this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                         }
                     }
                 } else {

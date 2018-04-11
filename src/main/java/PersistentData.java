@@ -1,4 +1,4 @@
-public class persistentData {
+public class PersistentData {
     private String method;
     private long timestamp;
     private String server;
@@ -6,7 +6,7 @@ public class persistentData {
     private String url;
     private String data;
 
-    public persistentData(String method, long timestamp, String server, String refer, String url, String data) {
+    public PersistentData(String method, long timestamp, String server, String refer, String url, String data) {
         this.method = method;
         this.timestamp = timestamp;
         this.server = server;
