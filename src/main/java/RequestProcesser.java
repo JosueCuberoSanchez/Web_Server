@@ -61,7 +61,7 @@ public class RequestProcesser {
             }
             //System.out.println("Payload data is: " + payload.toString());
             if (!payload.toString().equals("")) {
-                message += payload.toString();
+                message += payload.toString() + "\n";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,7 +167,6 @@ public class RequestProcesser {
                 this.processTxt(html);
             } else if (this.mimeType.equals("image/jpeg")) {
                 File jpeg = new File(resource);
-                this.contentLength = jpeg.length();
                 this.processImage(jpeg);
             } else { //php
                 //process PHP
@@ -180,9 +179,10 @@ public class RequestProcesser {
     private void processTxt(File file) {
         try {
             this.contentLength = file.length();
+            this.payload = "";
             BufferedReader br = new BufferedReader(new FileReader(file));
             for (String line; (line = br.readLine()) != null; ) {
-                this.payload += line;
+                this.payload += line + "\n";
             }
             // line is not visible here.
         } catch (Exception e) {
@@ -195,8 +195,8 @@ public class RequestProcesser {
             BufferedImage image = ImageIO.read(jpeg);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(image, "jpg", byteArrayOutputStream);
-            byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
             this.imagePayload = byteArrayOutputStream.toByteArray();
+            this.contentLength = (long) byteArrayOutputStream.size();
         } catch (Exception e) {
             e.printStackTrace();
         }
