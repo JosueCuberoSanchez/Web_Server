@@ -1,3 +1,4 @@
+
 /**
  * Created by Renato on 09/04/18.
  */
@@ -16,5 +17,29 @@ public class PersistentData {
         this.refer = refer;
         this.url = url;
         this.data = data;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public String getRefer() {
+        return refer;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getData() {
+        return data;
     }
 }
