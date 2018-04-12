@@ -1,22 +1,16 @@
-import sun.rmi.runtime.Log;
-
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.ServerSocket;
-import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
 /**
- * Created by josue on 21/03/18.
+ * Created by Josue on 21/03/18.
  */
-public class RequestProcesser {
+public class RequestProcessor {
     private LogManager logManager;
     private List<String> mimeTypes;
     private String httpResponse;
@@ -28,7 +22,7 @@ public class RequestProcesser {
     private OutputStream os;
     private byte[] imagePayload;
 
-    public RequestProcesser(OutputStream os, InputStream is, LogManager logManager) {
+    public RequestProcessor(OutputStream os, InputStream is, LogManager logManager) {
         this.logManager = logManager;
         this.mimeTypes = new LinkedList<String>();
         this.mimeTypes.add("text/html");
@@ -51,7 +45,6 @@ public class RequestProcesser {
             String headerLine = null;
             while ((headerLine = br.readLine()).length() != 0) {
                 message += headerLine + "\n";
-                //System.out.println(headerLine);
             }
 
             //code to read the post payload data
@@ -59,7 +52,6 @@ public class RequestProcesser {
             while (br.ready()) {
                 payload.append((char) br.read());
             }
-            //System.out.println("Payload data is: " + payload.toString());
             if (!payload.toString().equals("")) {
                 message += payload.toString() + "\n";
             }
@@ -74,9 +66,9 @@ public class RequestProcesser {
             String message = this.buildMessage();
             System.out.println(message);
             String splitMessage[] = message.split("\n"); // Splits the message by lines
-            String data ="";
-            if (splitMessage.length>6) {
-                data=splitMessage[6];
+            String data = "";
+            if (splitMessage.length > 6) {
+                data = splitMessage[6];
             }
             String resource = (splitMessage[0].split("/"))[1]; // Retrieve the name of the file and its extension, with other content
             String method = (splitMessage[0].split("/"))[0]; // Retrieve the method
@@ -188,7 +180,6 @@ public class RequestProcesser {
             for (String line; (line = br.readLine()) != null; ) {
                 this.payload += line + "\n";
             }
-            // line is not visible here.
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,7 +199,7 @@ public class RequestProcesser {
 
     private boolean resourceExists(String resource) {
         resource = "src/main/resources/" + resource;
-        File f = new File(resource); //no se si sirva con imagenes
+        File f = new File(resource);
         return (f.exists());
     }
 

@@ -1,6 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ public class LogManager {
     private PersistentData persistentData;
 
     public LogManager() {
-        this.showLog();
         this.registers = new ArrayList<PersistentData>();
     }
 
@@ -22,15 +20,6 @@ public class LogManager {
         this.persistentData = new PersistentData(method, time, server, refer, url, data);
         this.registers.add(this.persistentData);
         this.parseToJson();
-    }
-
-    private void showLog() {
-        File htmlFile = new File("src/main/resources/LogTable.html");
-        try {
-            Desktop.getDesktop().browse(htmlFile.toURI());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void parseToJson() {
