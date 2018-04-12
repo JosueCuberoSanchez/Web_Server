@@ -14,6 +14,7 @@ public class LogManager {
 
     public LogManager() {
         this.registers = new ArrayList<PersistentData>();
+        this.showLog();
     }
 
     public synchronized void write(String method, long time, String server, String refer, String url, String data) {
@@ -29,5 +30,9 @@ public class LogManager {
         } catch (IOException e) {
             System.out.println("Can't write in Json file");
         }
+    }
+
+    private void showLog(){
+
     }
 }
