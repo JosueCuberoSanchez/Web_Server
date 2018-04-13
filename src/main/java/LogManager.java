@@ -13,8 +13,14 @@ public class LogManager {
     private PersistentData persistentData;
 
     public LogManager() {
-        this.registers = new ArrayList<PersistentData>();
-        this.showLog();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            this.registers = mapper.readValue(new File("src/main/resources/logRegister.json"), List.class);
+        } catch (IOException e) {
+            System.out.println("Json file is empty");
+            this.registers = new ArrayList<PersistentData>();
+        }
+        //this.showLog();
     }
 
     public synchronized void write(String method, long time, String server, String refer, String url, String data) {
@@ -32,7 +38,7 @@ public class LogManager {
         }
     }
 
-    private void showLog(){
+    private void showLog() {
 
     }
 }
