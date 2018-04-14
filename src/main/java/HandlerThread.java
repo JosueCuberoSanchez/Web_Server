@@ -2,7 +2,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Created by Josue on 21/03/18.
+ * Universidad de Costa Rica
+ * Facultad de Ingenierías
+ * Escuela de Ciencias de la Computación e Informática
+ * Profesor Braulio Solano
+ * @author Josué Cubero Sánchez, B42190
+ * @author Renato Mainieri Sáenz, B54076
+ * Primer Ciclo, 2018
+ *
+ * Thread class that will call RequestProcessor to handle the request.
  */
 public class HandlerThread implements Runnable {
     private OutputStream os;

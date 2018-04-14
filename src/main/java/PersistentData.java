@@ -1,7 +1,14 @@
 
 /**
- * Created by Renato on 09/04/18.
+ * Universidad de Costa Rica
+ * Facultad de Ingenierías
+ * Escuela de Ciencias de la Computación e Informática
+ * Profesor Braulio Solano
+ * @author Josué Cubero Sánchez, B42190
+ * @author Renato Mainieri Sáenz, B54076
+ * Primer Ciclo, 2018
  */
+
 public class PersistentData {
     private String method;
     private long timestamp;
