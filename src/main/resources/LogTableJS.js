@@ -37,5 +37,5 @@ function deleteRows(table, quantity) {
 }
 
 $(document).ready(function () {
-
+    refreshTable();
 });

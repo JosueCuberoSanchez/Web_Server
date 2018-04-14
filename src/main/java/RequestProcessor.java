@@ -40,6 +40,7 @@ public class RequestProcessor {
         this.is = is;
         this.os = os;
         this.httpResponse = "HTTP/1.1 200 OK"; //for the moment, in other case it will change
+        this.contentLength = Long.valueOf(0);
     }
 
     /**
