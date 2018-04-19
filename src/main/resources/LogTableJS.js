@@ -30,6 +30,22 @@ function refreshTable() {
     xmltype.send();
 }
 
+function cleanTable() {
+    var clean = confirm("Seguro que desea eliminar todos los registros de la Bitácora?");
+    if (clean == true) {
+        var table = document.getElementById("table");
+        deleteRows(table, table.rows.length - 1);
+
+        // delete registers
+        alert(1);
+        var fh = fopen("logRegister.json", 3); // Open the file for writing
+        alert(2);
+
+        fs.writeFile("logRegister.json", "");
+
+    }
+}
+
 function deleteRows(table, quantity) {
     for (var x = quantity; x > 0; x--) {
         table.deleteRow(x);
