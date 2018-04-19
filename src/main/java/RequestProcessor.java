@@ -28,6 +28,7 @@ public class RequestProcessor {
     private PrintWriter printWriter;
     private InputStream is;
     private OutputStream os;
+    private boolean head;
 
     public RequestProcessor(OutputStream os, InputStream is, LogManager logManager) {
         this.logManager = logManager;
@@ -41,6 +42,7 @@ public class RequestProcessor {
         this.os = os;
         this.httpResponse = "HTTP/1.1 200 OK"; //for the moment, in other case it will change
         this.contentLength = Long.valueOf(0);
+        this.head = false;
     }
 
     /**
@@ -104,10 +106,10 @@ public class RequestProcessor {
                     this.httpResponse = "HTTP/1.1 404 Not Found";
                 }
             } else if (method.startsWith("HEAD")) {
+                this.head = true;
                 if (this.resourceExists(resource)) {
                     this.mimeType = this.getMimeType(resource);
                     if (this.mimeTypes.contains(this.mimeType)) {
-                        this.openFile("src/main/resources/" + resource);
                         this.logManager.write(method, (new Timestamp(System.currentTimeMillis())).getTime(), "Monkey Labs Server", "localhost", "/" + resource, data);
                     } else {
                         if (!resource.equals("")) {
@@ -147,15 +149,17 @@ public class RequestProcessor {
             this.printWriter.println("Referer: localhost");
             this.printWriter.println("Content-Length: " + this.contentLength);
             this.printWriter.println();
-            if (this.mimeType.equals("image/jpeg")) {
-                this.os.write(this.imagePayload);
-                this.os.flush();
-            } else {
-                this.printWriter.println(this.payload);
-                this.printWriter.flush();
+            if(!this.head) {
+                if (this.mimeType.equals("image/jpeg")) {
+                    this.os.write(this.imagePayload);
+                    this.os.flush();
+                } else {
+                    this.printWriter.println(this.payload);
+                    this.printWriter.flush();
+                }
+                this.printWriter.close();
+                this.os.close();
             }
-            this.printWriter.close();
-            this.os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
