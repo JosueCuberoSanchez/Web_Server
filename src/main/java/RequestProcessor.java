@@ -89,6 +89,9 @@ public class RequestProcessor {
             String resource = (splitMessage[0].split("/"))[1]; // Retrieve the name of the file and its extension, with other content
             String method = (splitMessage[0].split("/"))[0]; // Retrieve the method
             resource = (resource.split(" "))[0]; // Retrieve JUST the name of the file and its extension, without other content
+            if(resource.equals("")){
+                resource = "index.html";
+            }
             if (method.startsWith("GET")) {
                 if (this.resourceExists(resource)) {
                     this.mimeType = this.getMimeType(resource);
